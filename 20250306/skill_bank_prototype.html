@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技能银行原型图</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .prototype-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .screen {
+            width: 375px;
+            height: 812px;
+            background-color: #fff;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 1px solid #ddd;
+        }
+        
+        .screen-title {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 14px;
+            color: #000;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        /* 底部导航栏 */
+        .tab-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 83px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .tab-item.active {
+            color: #1890ff;
+        }
+        
+        .tab-item i {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            height: calc(812px - 44px - 83px);
+            overflow-y: auto;
+            padding: 15px;
+        }
+        
+        /* 登录注册页面样式 */
+        .login-header {
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 50px;
+        }
+        
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background-color: #1890ff;
+            border-radius: 20px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+        }
+        
+        .login-form {
+            padding: 0 20px;
+        }
+        
+        .form-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 0 15px 0 50px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+        
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: #999;
+            font-size: 20px;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            height: 50px;
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .btn-text {
+            text-align: center;
+            margin-top: 15px;
+            color: #1890ff;
+            font-size: 14px;
+        }
+        
+        /* 首页样式 */
+        .search-bar {
+            display: flex;
+            height: 40px;
+            background-color: #f5f5f5;
+            border-radius: 20px;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+        
+        .search-bar i {
+            color: #999;
+            margin-right: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .banner {
+            height: 150px;
+            background-color: #e6f7ff;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1890ff;
+            font-size: 18px;
+            font-weight: bold;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-more {
+            font-size: 14px;
+            color: #999;
+            font-weight: normal;
+        }
+        
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .skill-card {
+            width: calc(50% - 5px);
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .skill-img {
+            height: 100px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+        }
+        
+        .skill-info {
+            padding: 10px;
+        }
+        
+        .skill-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .skill-provider {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .skill-provider i {
+            margin-right: 5px;
+            font-size: 14px;
+        }
+        
+        .skill-points {
+            font-size: 14px;
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        
+        /* 技能详情页样式 */
+        .detail-header {
+            height: 200px;
+            background-color: #e6f7ff;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1890ff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+        
+        .detail-content {
+            padding: 20px 15px;
+        }
+        
+        .detail-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .detail-provider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .provider-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+        }
+        
+        .provider-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .detail-points {
+            font-size: 18px;
+            color: #ff4d4f;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .detail-desc {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .detail-section {
+            margin-bottom: 20px;
+        }
+        
+        .detail-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-section-title i {
+            margin-right: 8px;
+            color: #1890ff;
+        }
+        
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-tag {
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .detail-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .contact-btn {
+            width: 50px;
+            height: 50px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .exchange-btn {
+            flex: 1;
+            height: 50px;
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 发布技能页面样式 */
+        .publish-form {
+            padding: 0 15px;
+        }
+        
+        .publish-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .publish-item {
+            margin-bottom: 20px;
+        }
+        
+        .publish-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .publish-input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 0 15px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+        
+        .publish-textarea {
+            width: 100%;
+            height: 120px;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            resize: none;
+        }
+        
+        .publish-upload {
+            width: 100%;
+            height: 150px;
+            border: 1px dashed #e8e8e8;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            background-color: #f9f9f9;
+        }
+        
+        .publish-upload i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .publish-category {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .category-item {
+            padding: 8px 15px;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .category-item.active {
+            background-color: #e6f7ff;
+            color: #1890ff;
+        }
+        
+        /* 个人中心页面样式 */
+        .profile-header {
+            height: 200px;
+            background-color: #1890ff;
+            position: relative;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            color: white;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: white;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1890ff;
+            font-size: 40px;
+            border: 2px solid white;
+        }
+        
+        .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-points {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-points i {
+            margin-right: 5px;
+        }
+        
+        .profile-menu {
+            background-color: white;
+            border-radius: 10px;
+            margin-top: -20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-item {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1890ff;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .menu-title {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .menu-arrow {
+            color: #999;
+            font-size: 14px;
+        }
+        
+        /* 积分明细页面样式 */
+        .points-list {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .points-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .points-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1890ff;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .points-info {
+            flex: 1;
+        }
+        
+        .points-title {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .points-time {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .points-value {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .points-value.income {
+            color: #52c41a;
+        }
+        
+        .points-value.expense {
+            color: #ff4d4f;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-container">
+        <!-- 登录页面 -->
+        <div>
+            <h3 class="screen-title">登录页面</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div class="login-header">
+                        <div class="app-logo">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h2>技能银行</h2>
+                        <p style="color: #666; margin-top: 5px;">用技能交换价值</p>
+                    </div>
+                    <div class="login-form">
+                        <div class="form-item">
+                            <i class="fas fa-user form-icon"></i>
+                            <input type="text" class="form-input" placeholder="请输入手机号">
+                        </div>
+                        <div class="form-item">
+                            <i class="fas fa-lock form-icon"></i>
+                            <input type="password" class="form-input" placeholder="请输入密码">
+                        </div>
+                        <div class="btn-primary">登录</div>
+                        <div class="btn-text">还没有账号？立即注册</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 注册页面 -->
+        <div>
+            <h3 class="screen-title">注册页面</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div class="login-header">
+                        <div class="app-logo">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h2>技能银行</h2>
+                        <p style="color: #666; margin-top: 5px;">用技能交换价值</p>
+                    </div>
+                    <div class="login-form">
+                        <div class="form-item">
+                            <i class="fas fa-user form-icon"></i>
+                            <input type="text" class="form-input" placeholder="请输入手机号">
+                        </div>
+                        <div class="form-item">
+                            <i class="fas fa-shield-alt form-icon"></i>
+                            <input type="text" class="form-input" placeholder="请输入验证码">
+                            <span style="position: absolute; right: 15px; top: 15px; color: #1890ff;">获取验证码</span>
+                        </div>
+                        <div class="form-item">
+                            <i class="fas fa-lock form-icon"></i>
+                            <input type="password" class="form-input" placeholder="请设置密码">
+                        </div>
+                        <div class="btn-primary">注册</div>
+                        <div class="btn-text">已有账号？立即登录</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 首页 -->
+        <div>
+            <h3 class="screen-title">首页</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="search-input" placeholder="搜索技能">
+                    </div>
+                    <div class="banner">
+                        <img src="https://via.placeholder.com/375x150" alt="Banner" class="banner-img">
+                    </div>
+                    <div class="section-title">
+                        <span>热门技能</span>
+                        <span class="section-more">查看更多 <i class="fas fa-chevron-right"></i></span>
+                    </div>
+                    <div class="skill-list">
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-camera"></i> 摄影服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">专业人像摄影（1小时）</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 摄影师小王
+                                </div>
+                                <div class="skill-points">3 积分</div>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-language"></i> 翻译服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">德语翻译（1000字）</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 留学生小李
+                                </div>
+                                <div class="skill-points">5 积分</div>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-utensils"></i> 烹饪服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">宝宝辅食制作视频（3集）</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 宝妈小张
+                                </div>
+                                <div class="skill-points">2 积分</div>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-paint-brush"></i> 设计服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">室内设计方案</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 设计师小陈
+                                </div>
+                                <div class="skill-points">10 积分</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-title">
+                        <span>推荐技能</span>
+                        <span class="section-more">查看更多 <i class="fas fa-chevron-right"></i></span>
+                    </div>
+                    <div class="skill-list">
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-laptop-code"></i> 技术服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">智能家居安装</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 工程师小刘
+                                </div>
+                                <div class="skill-points">8 积分</div>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-car"></i> 出行服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">特斯拉月租（3天）</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 车主小赵
+                                </div>
+                                <div class="skill-points">15 积分</div>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-child"></i> 教育服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">早教课程（月卡）</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 早教中心
+                                </div>
+                                <div class="skill-points">12 积分</div>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-img">
+                                <i class="fas fa-heartbeat"></i> 健康服务
+                            </div>
+                            <div class="skill-info">
+                                <div class="skill-title">瑜伽私教（1小时）</div>
+                                <div class="skill-provider">
+                                    <i class="fas fa-user-circle"></i> 瑜伽教练小美
+                                </div>
+                                <div class="skill-points">4 积分</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item active">
+                        <i class="fas fa-home"></i>
+                        <span>首页</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-compass"></i>
+                        <span>发现</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>发布</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-bell"></i>
+                        <span>消息</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-user"></i>
+                        <span>我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 技能详情页 -->
+        <div>
+            <h3 class="screen-title">技能详情页</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content" style="padding: 0;">
+                    <div class="detail-header">
+                        <div class="back-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+                        <img src="https://via.placeholder.com/375x200" alt="技能图片" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="detail-content">
+                        <div class="detail-title">专业人像摄影（1小时）</div>
+                        <div class="detail-provider">
+                            <div class="provider-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="provider-name">摄影师小王</div>
+                        </div>
+                        <div class="detail-points">3 积分（约150元）</div>
+                        <div class="detail-desc">
+                            提供1小时专业人像摄影服务，包括构图指导、灯光调整、姿势指导等。拍摄后提供10张精修照片，可用于个人写真、证件照、社交媒体等多种场景。
+                        </div>
+                        <div class="detail-section">
+                            <div class="detail-section-title">
+                                <i class="fas fa-tag"></i> 技能分类
+                            </div>
+                            <div class="detail-tags">
+                                <div class="detail-tag">摄影服务</div>
+                                <div class="detail-tag">人像摄影</div>
+                                <div class="detail-tag">艺术创作</div>
+                            </div>
+                        </div>
+                        <div class="detail-section">
+                            <div class="detail-section-title">
+                                <i class="fas fa-map-marker-alt"></i> 服务地点
+                            </div>
+                            <div style="font-size: 16px; color: #333;">
+                                线下服务 · 上海市徐汇区
+                            </div>
+                        </div>
+                        <div class="detail-section">
+                            <div class="detail-section-title">
+                                <i class="fas fa-calendar-alt"></i> 服务时间
+                            </div>
+                            <div style="font-size: 16px; color: #333;">
+                                周一至周五 10:00-18:00
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-footer">
+                        <div class="contact-btn">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <div class="exchange-btn">立即兑换</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 发布技能页面 -->
+        <div>
+            <h3 class="screen-title">发布技能页面</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div class="publish-title">发布技能</div>
+                    <div class="publish-form">
+                        <div class="publish-item">
+                            <label class="publish-label">技能名称</label>
+                            <input type="text" class="publish-input" placeholder="请输入技能名称（最多20字）">
+                        </div>
+                        <div class="publish-item">
+                            <label class="publish-label">技能分类</label>
+                            <div class="publish-category">
+                                <div class="category-item active">摄影服务</div>
+                                <div class="category-item">翻译服务</div>
+                                <div class="category-item">设计服务</div>
+                                <div class="category-item">技术服务</div>
+                                <div class="category-item">教育服务</div>
+                                <div class="category-item">健康服务</div>
+                            </div>
+                        </div>
+                        <div class="publish-item">
+                            <label class="publish-label">技能积分</label>
+                            <input type="number" class="publish-input" placeholder="请输入兑换所需积分">
+                            <div style="font-size: 12px; color: #999; margin-top: 5px;">提示：1积分约等于50元</div>
+                        </div>
+                        <div class="publish-item">
+                            <label class="publish-label">技能描述</label>
+                            <textarea class="publish-textarea" placeholder="请详细描述您的技能，包括服务内容、时长、地点等信息"></textarea>
+                        </div>
+                        <div class="publish-item">
+                            <label class="publish-label">上传图片</label>
+                            <div class="publish-upload">
+                                <i class="fas fa-camera"></i>
+                                <span>上传技能展示图片</span>
+                            </div>
+                        </div>
+                        <div class="btn-primary" style="margin-bottom: 30px;">发布技能</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 个人中心页面 -->
+        <div>
+            <h3 class="screen-title">个人中心页面</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content" style="padding: 0;">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-name">张三</div>
+                        <div class="profile-points">
+                            <i class="fas fa-coins"></i> 积分余额：25
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div class="profile-menu">
+                            <div class="menu-item">
+                                <div class="menu-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="menu-title">我的技能</div>
+                                <div class="menu-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="menu-item">
+                                <div class="menu-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div class="menu-title">交易记录</div>
+                                <div class="menu-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="menu-item">
+                                <div class="menu-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="menu-title">积分明细</div>
+                                <div class="menu-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="menu-item">
+                                <div class="menu-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="menu-title">我的收藏</div>
+                                <div class="menu-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="menu-item">
+                                <div class="menu-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="menu-title">设置</div>
+                                <div class="menu-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item">
+                        <i class="fas fa-home"></i>
+                        <span>首页</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-compass"></i>
+                        <span>发现</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>发布</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-bell"></i>
+                        <span>消息</span>
+                    </div>
+                    <div class="tab-item active">
+                        <i class="fas fa-user"></i>
+                        <span>我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 积分明细页面 -->
+        <div>
+            <h3 class="screen-title">积分明细页面</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-chevron-left" style="margin-right: 10px;"></i>
+                            <span style="font-size: 18px; font-weight: bold;">积分明细</span>
+                        </div>
+                        <div style="font-size: 14px; color: #999;">
+                            <i class="fas fa-filter"></i> 筛选
+                        </div>
+                    </div>
+                    <div class="points-list">
+                        <div class="points-item">
+                            <div class="points-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="points-info">
+                                <div class="points-title">兑换智能家居安装</div>
+                                <div class="points-time">2025-02-25 13:40</div>
+                            </div>
+                            <div class="points-value expense">-8</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item">
+                        <i class="fas fa-home"></i>
+                        <span>首页</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-compass"></i>
+                        <span>发现</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>发布</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-bell"></i>
+                        <span>消息</span>
+                    </div>
+                    <div class="tab-item active">
+                        <i class="fas fa-user"></i>
+                        <span>我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 技能交易页面 -->
+        <div>
+            <h3 class="screen-title">技能交易页面</h3>
+            <div class="screen">
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-full"></i>
+                    </span>
+                </div>
+                <div class="content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-chevron-left" style="margin-right: 10px;"></i>
+                            <span style="font-size: 18px; font-weight: bold;">确认交易</span>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                        <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">技能信息</div>
+                        <div style="display: flex; margin-bottom: 15px;">
+                            <div style="width: 80px; height: 80px; background-color: #f0f0f0; border-radius: 8px; margin-right: 15px; display: flex; justify-content: center; align-items: center;">
+                                <i class="fas fa-camera" style="font-size: 30px; color: #999;"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">专业人像摄影（1小时）</div>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 5px;">摄影师小王</div>
+                                <div style="font-size: 16px; color: #ff4d4f; font-weight: bold;">3 积分</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                        <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">交易详情</div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="font-size: 16px; color: #666;">技能积分</div>
+                            <div style="font-size: 16px; color: #333;">3 积分</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="font-size: 16px; color: #666;">约合人民币</div>
+                            <div style="font-size: 16px; color: #333;">150 元</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="font-size: 16px; color: #666;">我的积分余额</div>
+                            <div style="font-size: 16px; color: #333;">25 积分</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+                            <div style="font-size: 16px; font-weight: bold;">交易后余额</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #52c41a;">22 积分</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background-color: white; border-radius: 10px; padding: 15px; margin-bottom: 30px;">
+                        <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">联系方式</div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <i class="fas fa-phone" style="color: #1890ff; margin-right: 10px;"></i>
+                            <div style="font-size: 16px; color: #333;">138****5678</div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-weixin" style="color: #1890ff; margin-right: 10px;"></i>
+                            <div style="font-size: 16px; color: #333;">wxid_******</div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-primary">确认兑换</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
